@@ -33,6 +33,22 @@ npm run dev
 
 ---
 
+## Tecnologías utilizadas
+
+| Capa | Tecnología |
+|---|---|
+| Framework principal | React Native + Expo |
+| Estilos | NativeWind (Tailwind CSS) |
+| Lenguaje | JavaScript (JSX) |
+| Comunicación con API | Fetch API |
+| Despliegue | AWS Amplify |
+
+## URL de producción
+
+[https://staging.d3vq4xmagul7hd.amplifyapp.com](https://staging.d3vq4xmagul7hd.amplifyapp.com)
+
+---
+
 ## Módulos profesionales
 
 ### Diseño de interfaces web
@@ -102,7 +118,7 @@ npm run dev
 
 #### Asociación RA con herramientas tecnológicas
 
-| RA | Herramienta |
+| RA | Herramientas |
 |---|---|
 | RA1 | Figma |
 | RA1 | Balsamiq |
@@ -170,7 +186,7 @@ npm run dev
 
 #### Asociación RA con herramientas tecnológicas
 
-| RA | Herramienta |
+| RA | Herramientas |
 |---|---|
 | RA1 | Figma |
 | RA1 | Balsamiq |
@@ -271,7 +287,7 @@ npm run dev
 
 #### Asociación RA con herramientas tecnológicas
 
-| RA | Herramienta |
+| RA | Herramientas |
 |---|---|
 | RA2 | JavaScript |
 | RA2 | React |
