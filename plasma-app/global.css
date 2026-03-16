@@ -1,0 +1,4 @@
+/* Este fichero activa Tailwind CSS en la aplicación */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
