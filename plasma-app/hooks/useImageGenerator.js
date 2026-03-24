@@ -8,7 +8,7 @@ import { useState } from "react";
 
 // ── Configuración de la API de Pollinations.ai ────────────────────────────────
 // Déjalo vacío si no tienes clave, la API funciona también sin ella
-const POLLINATIONS_API_KEY = "sk_Y30zHQKX96WTjC5ITGN9a4ocqNuzm1OU";
+const POLLINATIONS_API_KEY = "";
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ── Dirección de tu servidor local (TV de plasma) ────────────────────────────
