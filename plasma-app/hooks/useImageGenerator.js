@@ -6,17 +6,18 @@
 
 import { useState } from "react";
 
-// ── Cambia esta IP por la de tu ordenador en la red local ─────────────────────
-// Ejecuta `ipconfig` (Windows) o `ifconfig` (Mac/Linux) para encontrarla
+// ── Configuración de la API de Pollinations.ai ────────────────────────────────
+// Déjalo vacío si no tienes clave, la API funciona también sin ella
+const POLLINATIONS_API_KEY = "sk_Y30zHQKX96WTjC5ITGN9a4ocqNuzm1OU";
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ── Dirección de tu servidor local (TV de plasma) ────────────────────────────
+// Cambia esta IP por la de tu ordenador en la red local.
+// Ejecuta `ipconfig` (Windows) o `ifconfig` (Mac/Linux) para encontrarla.
 const API_URL = "http://192.168.1.100:3001";
 // ─────────────────────────────────────────────────────────────────────────────
 
 // Los estados posibles de la pantalla
-// 'idle'    → formulario vacío esperando al usuario
-// 'loading' → esperando respuesta de la API
-// 'result'  → imagen generada lista para ver
-// 'success' → imagen enviada a la TV correctamente
-// 'error'   → algo salió mal
 const ESTADOS = {
     IDLE: "idle",
     LOADING: "loading",
@@ -29,10 +30,10 @@ export function useImageGenerator() {
     // ── Estado ────────────────────────────────────────────────────────────────
     const [prompt, setPrompt] = useState("");       // texto que escribe el usuario
     const [estado, setEstado] = useState(ESTADOS.IDLE);
-    const [imageUrl, setImageUrl] = useState(null);   // URL de la imagen generada
-    const [error, setError] = useState(null);     // mensaje de error si hay
+    const [imageUrl, setImageUrl] = useState(null); // URL pública de la imagen
+    const [error, setError] = useState(null);       // mensaje de error si hay
 
-    // ── Función: enviar prompt a la API y recibir la imagen ───────────────────
+    // ── Función: generar URL de Pollinations.ai con semilla aleatoria ─────────
     const generarImagen = async () => {
         if (!prompt.trim()) return; // no hacer nada si el campo está vacío
 
@@ -40,28 +41,25 @@ export function useImageGenerator() {
         setError(null);
 
         try {
-            // TODO: cuando la API esté lista, descomentar esto y borrar el mock de abajo
-            //
-            // const respuesta = await fetch(`${API_URL}/api/generate`, {
-            //   method: "POST",
-            //   headers: { "Content-Type": "application/json" },
-            //   body: JSON.stringify({ prompt: prompt.trim() }),
-            // });
-            // const datos = await respuesta.json();
-            // setImageUrl(datos.results[0].url);
+            // 1. Construir la URL de la API de Pollinations
+            const encodedPrompt = encodeURIComponent(prompt.trim());
+            
+            // 2. Generamos una semilla aleatoria para fijar la imagen.
+            // Esto asegura que la TV y tu app muestren exactamente la misma imagen
+            // al cargar esta URL, en lugar de generar una nueva cada vez que se abre.
+            const randomSeed = Math.floor(Math.random() * 1000000);
 
-            // ── RESPUESTA DE EJEMPLO (mock) ───────────────────────────────────────
-            // Simulamos 2 segundos de espera como si la IA estuviera trabajando
-            await new Promise((resolve) => setTimeout(resolve, 2000));
+            const pollinationsUrl =
+                `https://gen.pollinations.ai/image/${encodedPrompt}` +
+                `?model=flux&nologo=true&seed=${randomSeed}` +
+                (POLLINATIONS_API_KEY ? `&key=${POLLINATIONS_API_KEY}` : "");
 
-            // Usamos una imagen de ejemplo de internet
-            // Cuando conectes la API real, esta línea desaparece
-            setImageUrl("https://picsum.photos/seed/ia-cpifp/1024/1024");
-            // ──────────────────────────────────────────────────────────────────────
-
+            // 3. Guardamos directamente la URL pública lista para usar
+            setImageUrl(pollinationsUrl);
             setEstado(ESTADOS.RESULT);
+
         } catch (e) {
-            setError("No se pudo conectar con la API. Comprueba tu conexión.");
+            setError(`Error al generar la imagen: ${e.message}`);
             setEstado(ESTADOS.ERROR);
         }
     };
@@ -69,19 +67,16 @@ export function useImageGenerator() {
     // ── Función: el usuario aprueba la imagen → se envía a la TV ─────────────
     const enviarATV = async () => {
         try {
-            // TODO: cuando la API esté lista, descomentar esto y borrar el mock de abajo
-            //
-            // await fetch(`${API_URL}/api/select`, {
-            //   method: "POST",
-            //   headers: { "Content-Type": "application/json" },
-            //   body: JSON.stringify({ images: [{ url: imageUrl }] }),
-            // });
+            await fetch(`${API_URL}/api/select`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                // Enviamos la URL pública de Pollinations a la TV
+                body: JSON.stringify({ images: [{ url: imageUrl }] }),
+            });
 
-            // ── RESPUESTA DE EJEMPLO (mock) ───────────────────────────────────────
-            await new Promise((resolve) => setTimeout(resolve, 800));
             setEstado(ESTADOS.SUCCESS);
         } catch (e) {
-            setError("No se pudo enviar la imagen a la pantalla.");
+            setError("No se pudo enviar la imagen a la pantalla. Verifica la conexión con la TV.");
             setEstado(ESTADOS.ERROR);
         }
     };

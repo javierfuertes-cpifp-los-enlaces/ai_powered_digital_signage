@@ -1,23 +1,26 @@
-import "./global.css"; 
+import "./global.css";
 
 import { View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useImageGenerator } from "./hooks/useImageGenerator";
 
-import { PromptForm }     from "./components/PromptForm";
+import { PromptForm } from "./components/PromptForm";
 import { LoadingSpinner } from "./components/LoadingSpinner";
-import { ImageResult }    from "./components/ImageResult";
+import { ImageResult } from "./components/ImageResult";
 import { SuccessMessage } from "./components/SuccessMessage";
+import { ErrorMessage } from "./components/ErrorMessage";
 
 export default function App() {
   const {
     prompt,
     imageUrl,
+    error,          // 👈 añadir
     estaIdle,
     estaCargando,
     tieneResultado,
     enviado,
+    tieneError,     // 👈 añadir
     setPrompt,
     generarImagen,
     enviarATV,
@@ -51,6 +54,12 @@ export default function App() {
           {enviado && (
             <SuccessMessage
               imageUrl={imageUrl}
+              onReiniciar={reiniciar}
+            />
+          )}
+          {tieneError && (
+            <ErrorMessage
+              mensaje={error}
               onReiniciar={reiniciar}
             />
           )}
