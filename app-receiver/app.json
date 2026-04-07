@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "app-emisora",
-    "slug": "app-emisora",
+    "name": "app-receiver",
+    "slug": "app-receiver",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "appemisora",
+    "scheme": "appreceiver",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
